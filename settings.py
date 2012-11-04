@@ -1,3 +1,20 @@
+# Initialize App Engine and import the default settings (DB backend, etc.).
+# If you want to use a different backend you have to remove all occurences
+# of "djangoappengine" from this file.
+from djangoappengine.settings_base import *
+from djangoappengine.utils import on_production_server
+
+import os
+
+from djangoappengine.settings_base import *
+
+DATABASES['default']['HIGH_REPLICATION'] = True
+
+# Activate django-dbindexer for the default database
+DATABASES['native'] = DATABASES['default']
+DATABASES['default'] = {'ENGINE': 'dbindexer', 'TARGET': 'native'}
+
+
 # Django settings for Plum project.
 
 DEBUG = True
@@ -109,16 +126,17 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
+    'django.contrib.auth',
     'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'djangotoolbox',
+    'autoload',
+    'dbindexer',
+    'Plums',
+
+    # djangoappengine should come last, so it can override a few manage.py commands
+    'djangoappengine',
 )
 
 # A sample logging configuration. The only tangible logging
