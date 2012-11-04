@@ -1,0 +1,48 @@
+application: plum-app
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /.*
+  script: djangoappengine.main.application
+
+- url: /p.*
+  script: djangoappengine.main.application
+  login: admin
+
+
+inbound_services:
+- warmup
+
+libraries:
+- name: django
+  version: latest
+
+builtins:
+- remote_api: on
+- appstats: on
+- deferred: on
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- ^(.*/)?.*\.bak$
+- ^(.*/)?\.svn.*$
+- ^/tmp/.*
+- ^/resources/.*
+- ^/\.git.*
+- ^/\.gaedata.*
+- ^/\.idea.*

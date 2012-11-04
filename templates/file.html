@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plum | Project A</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" href="../js/lib/codemirror.css">
+    <link rel="stylesheet" href="../js/lib/util/simple-hint.css">
+    <link rel="stylesheet" href="../js/doc/docs.css">
+    <link rel="stylesheet" href="../js/theme/ambiance.css">
+
+</head>
+<body id="body">
+    <div class="row headerWrap">
+        <div class="twelve columns">
+            <div class="eight columns">
+                <div class="header">
+                    <span class="logo">Plum</span>
+                    <span class="tag">awesome coding.</span>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="four columns padBottom">
+            <h1>Filename</h1>
+        </div>
+        <div class="four columns">
+        </div>
+        <div class="two columns padBottom">
+            <span class="lastSaved">Last saved just now by You</span>
+        </div>
+        <div class="one column padBottom">
+            <div class="btn" id="darkLightSwitch" data-currently="dark">Dim</div>
+        </div>
+        
+
+    </div>
+    <div class="row">
+        <div class="twelve columns">
+              <form>
+                <textarea id="code" name="code"></textarea>
+              </form>
+        </div>
+    </div>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/common.js"></script>
+
+    <script src="../js/lib/codemirror.js"></script>
+    <script src="../js/lib/util/simple-hint.js"></script>
+    <script src="../js/lib/util/javascript-hint.js"></script>
+    <script src="../js/lib/util/foldcode.js"></script>
+    <script src="../js/mode/python/python.js"></script>
+     <script>
+      CodeMirror.commands.autocomplete = function(cm) {
+        CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);
+      }
+      var foldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        //extraKeys: {"Tab": "autocomplete"},
+        lineWrapping: true,
+        onGutterClick: foldFunc,
+        onChange: changedStuff
+      });
+      function changedStuff(instance, secondObject) {
+        console.log(secondObject);
+      }
+      function changeTheme(theme){
+        editor.setOption("theme", theme);
+      }
+    </script>
+    <script src="http://js.pusher.com/1.12/pusher.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      // Enable pusher logging - don't include this in production
+      Pusher.log = function(message) {
+        if (window.console && window.console.log) window.console.log(message);
+      };
+
+      // Flash fallback logging - don't include this in production
+      WEB_SOCKET_DEBUG = true;
+
+      var pusher = new Pusher('8754603d024bc6ca00de');
+      var channel = pusher.subscribe('testchannel');
+      channel.bind('dataPush', function(data) {
+          if(data.Type==="addChar"){
+            editor.setRangeHelper(data.LineFrom, data.LineTo, data.CharFrom, data.CharTo, data.ChangeTo);
+            //editor.setLine(0, data.ChangeTo);
+            console.log('h');
+          }
+      });
+    </script>
+
+
+</body>
+</html>
